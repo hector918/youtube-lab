@@ -1,7 +1,8 @@
 import "./App.css";
 import { useEffect } from "react";
 import Header from "./Components/Header";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route ,Routes } from "react-router-dom";
+import VideoDetailDisplay from "./Components/videoDetailDisplay";
 
 function App() {
   useEffect(() => {
@@ -20,6 +21,10 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <Header></Header>
+        <Routes>
+          <Route path="/" element={<div>home page</div>}></Route>
+          <Route path="video/:id" element={<VideoDetailDisplay/>}>test</Route>
+        </Routes>
       </div>
     </BrowserRouter>
   );
