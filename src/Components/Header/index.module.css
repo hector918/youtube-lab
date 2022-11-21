@@ -1,0 +1,29 @@
+.container {
+    background: red;
+    padding: 0.8rem;
+    text-align: left;
+}
+
+.container > span {
+    color: white;
+    text-transform: capitalize;
+    font-size: 1.2rem;
+}
+
+.container ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    gap: 1rem;
+    margin-left: 1rem;
+}
+
+.container a {
+    text-decoration: none;
+    color:#efefef;
+}
+
+.container a:hover {
+    color:#fff;
+}
