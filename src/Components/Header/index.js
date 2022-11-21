@@ -1,10 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import styles from "./index.module.css"
 
 export default function Header() {
   return (
-    <header>
-      youtube
+    <header className={styles.container}>
+      <span>youtube</span>
       <ul>
         <Link to="/">
           <li>Home</li>
