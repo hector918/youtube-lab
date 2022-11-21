@@ -3,10 +3,10 @@ import { useEffect } from "react";
 import Header from "./Components/Header";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import VideoDetailDisplay from "./Components/videoDetailDisplay";
+import Home from "./Components/Home";
 
 function App() {
   useEffect(() => {
-    console.log(process.env.REACT_APP_API_KEY);
     fetch(
       `https://youtube.googleapis.com/youtube/v3/search?key=${process.env.REACT_APP_API_KEY}`
     )
