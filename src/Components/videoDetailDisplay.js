@@ -6,7 +6,6 @@ import "./videoDetailDisplay.css";
 export default function VideoDetailDisplay(){
   const storage_prefix = "v-ideo";
   let {id} = useParams();
-  // id="idtyiNYROk4" ;
   let videoHistory;
   try {
     videoHistory = JSON.parse(localStorage.getItem(`${storage_prefix}${id}`))||{};
@@ -58,7 +57,7 @@ export default function VideoDetailDisplay(){
   return (
    <>
     <div className="video-container">
-        <iframe title="unique" type="text/html" src={`http://www.youtube.com/embed/${id}`}  frameBorder="0"/>
+        <iframe title="unique" type="text/html" src={`https://www.youtube.com/embed/${id}`}  frameBorder="0"/>
     </div>
     <hr className="hr"/>
     <div>
