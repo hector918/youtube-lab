@@ -6,7 +6,7 @@ import "./videoDetailDisplay.css";
 export default function VideoDetailDisplay(){
   const storage_prefix = "v-ideo";
   let {id} = useParams();
-  id="idtyiNYROk4" ;
+  // id="idtyiNYROk4" ;
   let videoHistory;
   try {
     videoHistory = JSON.parse(localStorage.getItem(`${storage_prefix}${id}`))||{};
