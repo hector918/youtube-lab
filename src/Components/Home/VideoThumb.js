@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export default function VideoThumb(props) {
   return (
     <Link to={`/video/${props.videoID}`}>
-        <img src={props.thumbnail}/> 
+        <img src={props.thumbnail} alt={props.title}/> 
         <h3>{props.title}</h3>
     </Link>
   );
