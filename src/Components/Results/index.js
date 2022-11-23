@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import Searchbar from "./Searchbar";
-import style from "./index.module.css";
-import VideoThumb from "./VideoThumb";
+import Searchbar from "../Home/Searchbar";
+import style from "../Home/index.module.css";
+import VideoThumb from "../Home/VideoThumb";
+import { useLocation } from "react-router-dom";
 
-
-export default function Home() {
+export default function Result() {
   const [videos, setVideos] = useState([]);
-   const search = "";
+  const query = new URLSearchParams(useLocation().search);
+   const search = query.get("q") || "";
   const getData = () => {
     fetch(
       `https://youtube.googleapis.com/youtube/v3/search?q=${search}&maxResults=20&part=snippet&type=video&key=${process.env.REACT_APP_API_KEY}`
@@ -19,7 +20,7 @@ export default function Home() {
   };
   useEffect(() => {
    getData();
-  }, []);
+  }, [search]);
   return (
     <div className={style.container}>
       <Searchbar query={search} />
