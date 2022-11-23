@@ -4,6 +4,7 @@
   height: 0;
   width: 60%;
   margin: auto;
+  margin-top: 50px;
 }
 .video-container iframe {
   position: absolute;

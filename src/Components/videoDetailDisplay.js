@@ -53,6 +53,10 @@ export default function VideoDetailDisplay(){
     localStorage.setItem(`${storage_prefix}${id}`,JSON.stringify(videoHistory));
     on_form_reset(evt);
   }
+  const on_comment_remove_click = (idx)=>{
+    comments.splice(idx);
+    setComments([...comments]);
+  }
   ////////////////////////////////////////////////////////
   return (
    <>
@@ -74,8 +78,9 @@ export default function VideoDetailDisplay(){
       </div>
       <p>Comments</p>
       <ul className="video-comment-container">
-        {comments.map((el,idx)=><li key={idx}><span>{el.name}</span> Says: <span>{el.comment}</span></li>)}
+        {comments.map((el,idx)=><li key={idx}><h4>{el.name}</h4><p>{el.comment}</p><button style={{borderRadius:"50px"}} onClick={()=>{on_comment_remove_click(idx)}}>❌</button></li>)}
       </ul>
+      <hr className="hr"/>
     </div>
 
    </>
