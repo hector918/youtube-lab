@@ -52,12 +52,12 @@ export default function Searchbar({ query, upliftVideos }) {
 
 
     // window.history.replaceState({url: url}, 'home', url);
-    //${process.env.REACT_APP_API_KEY}
+    //
     
     if(!fetchStatus)
     {
       fetchStatus=true;
-      let fetch_url = `https://youtube.googleapis.com/youtube/v3/search?${search_string}&part=snippet&type=video&key=AIzaSyAuS128nENk1_nP-PO2crawo-uBzjmMFZM`;
+      let fetch_url = `https://youtube.googleapis.com/youtube/v3/search?${search_string}&part=snippet&type=video&key=${process.env.REACT_APP_API_KEY}`;
       console.log("dads",fetch_url);
 
       fetch(fetch_url)
