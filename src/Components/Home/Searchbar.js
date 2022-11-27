@@ -1,72 +1,131 @@
 import { useEffect, useState} from "react";
 import style from "./index.module.css";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {decode as base64_decode, encode as base64_encode} from 'base-64';
 // import { useErrorHandler } from 'react-error-boundary';
 let _SetVideos;
-
-export default function Searchbar({ query, setVideos }) {
+let fetchStatus=false;
+const search_default_setting = {q:"","maxResults":"5",order:"date",safeSearch:"none",relevanceLanguage:"en",pageToken:""};
+export default function Searchbar({ query, upliftVideos }) {
   ////variable/////////////////////////////////
-  _SetVideos = setVideos;
-  const search_default_setting = {q:"","maxResults":"5",order:"date",safeSearch:"none",relevanceLanguage:"en"};
-  const [search,setSearch] = useState(query?.slice(8)||"");
+
+  if(Array.isArray(upliftVideos)&&upliftVideos.length===1){
+    _SetVideos = upliftVideos.pop();
+  } 
+  
+
+  
+  
+  let query_to_obj
+  try {
+    query_to_obj = query.slice(8);
+
+ 
+    // query_to_obj = JSON.parse(base64_decode(query_to_obj));
+  } catch (error) {
+    console.log((error))
+    query_to_obj = base64_encode(JSON.stringify({}));
+  }
+  const [search,setSearch] = useState(query_to_obj);
+ 
   const [pageTokens, SetPageTokens] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState(search_default_setting);
   ///////////////////////////////////////////////////////////////////////
   useEffect(()=>{
-    const decode_search = base64_decode(search);
-    fetch(`https://youtube.googleapis.com/youtube/v3/search?q=${decode_search}&part=snippet&type=video&key=${process.env.REACT_APP_API_KEY}`)
+    console.log("useeffect -> start");
+   
+  })
+  useEffect(()=>{
+    console.log("useeffect -> search",search,base64_decode(search))
+    let decode_search =  JSON.parse(base64_decode(search));
+    let search_string = "";
+    for(let x in decode_search)
+    {
+      if(Object.keys(search_default_setting).includes(x))
+      {
+        setSearchKeyword(pv=>({...pv,[x]:decode_search[x]}));
+        search_string += `${x}=${decode_search[x]}&`;
+      }
+    }
+
+    // var url = `${window.location.pathname}?results=${search}`;
+
+
+    // window.history.replaceState({url: url}, 'home', url);
+    //${process.env.REACT_APP_API_KEY}
+    
+    if(!fetchStatus)
+    {
+      fetchStatus=true;
+      let fetch_url = `https://youtube.googleapis.com/youtube/v3/search?${search_string}&part=snippet&type=video&key=AIzaSyAuS128nENk1_nP-PO2crawo-uBzjmMFZM`;
+      console.log("dads",fetch_url);
+
+      fetch(fetch_url)
       .then((response) => response.json())
       .then((data) => {
+        fetchStatus=false;
 
-        // console.log(data);
+        console.log(data);
         if(data['error']) console.log(data['error']);
+
         if(_SetVideos) _SetVideos(data["items"]);
         if(data["nextPageToken"]) SetPageTokens(pv=>[...pv,data["nextPageToken"]]);
       })
       .catch((error) => {
+        fetchStatus=false;
+
         //should add a error handling in here
         console.log(error);
       })
-
+    }
     
   },[search])
-
+  
 
   //handle window histroy back and forward event
   window.onpopstate = function(event) {
-    console.log("location: " + document.location + ", state: " + JSON.stringify(event.state));
-    console.log(search);
+    // console.log("location: " + document.location + ", state: " + JSON.stringify(event.state));
     const decode_search = base64_decode(search);
+    
     const keyword_filter = Object.keys(search_default_setting);
+    console.log("onhistroy move",window.history,decode_search);
+
+    let new_search_string = "";
     for(let x of decode_search.split("&"))
     {
       let [ key , val ] = x.split("=");
-      if(keyword_filter.includes(key)) setSearchKeyword(pv=>({...pv,[key]:val}));
+      if(keyword_filter.includes(key)){
+        setSearchKeyword(pv=>({...pv,[key]:val||""}));
+        new_search_string+=`${key}=${val}&`;
+      } 
     }
+    setSearch(base64_encode(new_search_string));
   };
   /////event//////////////////////////////////////////////////////////////
-  
+  const navigate = useNavigate();
   // const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
-    let search_para = "";
+    let search_obj = {};
     for(let x of e.target)
     {
-      if(x.name&&["SELECT","INPUT"].includes(x.tagName)) search_para+=`${x.name}=${x.value}&`;
+      if(x.name&&["SELECT","INPUT"].includes(x.tagName)){
+        search_obj[x.name]=x.value;
+      } 
     }
-    search_para = base64_encode(search_para);
-    var url = `${window.location.pathname}?results=${search_para}`;
-    window.history.pushState({url: url}, '', url);
-    setSearch(search_para);
+    
+    setSearch(base64_encode(JSON.stringify(search_obj)));
     SetPageTokens([]);
-    console.log(window.history);
-    // navigate(`/results=${base64_encode(JSON.stringify(searchKeyword))}`)
+
+    navigate(`/results=${base64_encode(JSON.stringify(searchKeyword))}`)
   };
   const on_page_button_click= (evt)=>{
+    if(pageTokens.length===0) return;
     const dirction = evt.target.name==="next"?pageTokens.pop():"";
-    const decode_search = base64_decode(search);
-    setSearch(base64_encode(`${decode_search}&pageToken=${dirction}`));
+    const decode_search = JSON.parse(base64_decode(search));
+    decode_search["pageToken"]=dirction;
+    console.log(decode_search);
+    setSearch(base64_encode(JSON.stringify(decode_search)));
   }
 /////////////////////////////////////////////////////////////////////////////////
   return (

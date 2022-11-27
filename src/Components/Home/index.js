@@ -7,18 +7,16 @@ import { useParams } from "react-router-dom";
 export default function Home() {
   const [videos, setVideos] = useState([]);
 
-  const {results} = useParams();
-  
-  
+  let params = useParams();
+
   // from hector I altered the code right below.
   // const query = new URLSearchParams(useLocation().search);
   // const search = query.get("q") || "";
   // console.log(search,results);
 
-
   return (
     <div className={style.container}>
-      <Searchbar query={results} setVideos={setVideos}/>
+      <Searchbar query={params?.results} upliftVideos={[setVideos]}/>
       {videos.length === 0 && <p>No Videos Found</p>}
       <div className={style.videos}>
         {videos.map((video) => (
