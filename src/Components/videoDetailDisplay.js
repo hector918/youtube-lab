@@ -7,6 +7,7 @@ export default function VideoDetailDisplay(){
   const storage_prefix = "v-ideo";
   let {id} = useParams();
   let videoHistory;
+  console.log(window.history);
   try {
     videoHistory = JSON.parse(localStorage.getItem(`${storage_prefix}${id}`))||{};
   } catch (error) {
