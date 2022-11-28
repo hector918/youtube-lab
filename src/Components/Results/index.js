@@ -14,7 +14,7 @@ export default function Result() {
     )
       .then((response) => response.json())
       .then((data) => {
-        setVideos(data.items);
+       setVideos(data.items);
       })
       .catch((error) => console.log(error));
   };
