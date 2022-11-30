@@ -3,6 +3,7 @@ import Header from "./Components/Header";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import VideoDetailDisplay from "./Components/videoDetailDisplay";
 import Home from "./Components/Home";
+import About from "./Components/about";
 // import Result from "./Components/Results";
 
 function App() {
@@ -14,8 +15,9 @@ function App() {
           {/* from hector I alter you code a little bit right below */}
           <Route path="/" element={<Home />} />
           <Route path="/:results" element={<Home />} />
-          <Route path="video/:id" element={<VideoDetailDisplay />}>
-        </Route>
+          <Route path="video/:id" element={<VideoDetailDisplay />}/>
+          <Route path="about" element={<About />}/>
+        
         </Routes>
       </div>
     </BrowserRouter>
